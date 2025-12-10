@@ -11,7 +11,7 @@
 
 ## 📺 Demo Video
 
-![Dashboard Demo](file:///C:/Users/mvsar/.gemini/antigravity/brain/4a050633-a517-450a-a86c-c4e74008491e/dashboard_demo_full_1765349444474.webp)
+![Dashboard Demo](assets/dashboard_demo.webp)
 
 *Watch the dashboard in action with real-time data pool monitoring and environment switching*
 
@@ -73,12 +73,12 @@ When running automated tests in parallel:
 ## 📸 Screenshots
 
 ### Dashboard Overview
-![Dashboard Complete](file:///C:/Users/mvsar/.gemini/antigravity/brain/4a050633-a517-450a-a86c-c4e74008491e/dashboard_demo_complete_1765349485854.png)
+![Dashboard Complete](assets/dashboard_full.png)
 
 *Real-time monitoring dashboard with stats, data pool status, and test results*
 
 ### Multi-Environment Architecture
-![Multi-Environment](file:///C:/Users/mvsar/.gemini/antigravity/brain/4a050633-a517-450a-a86c-c4e74008491e/multi_environment_architecture_1765348196815.png)
+![Multi-Environment](assets/architecture.png)
 
 *Separate data pools for QA, Dev, and Prod environments*
 
