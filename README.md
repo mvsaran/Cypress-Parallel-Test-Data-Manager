@@ -5,7 +5,6 @@
 [![License](https://img.shields.io/badge/license-ISC-green)](LICENSE)
 [![Cypress](https://img.shields.io/badge/cypress-13.6.2-brightgreen)](https://www.cypress.io/)
 [![Node](https://img.shields.io/badge/node-%3E%3D14.0.0-blue)](https://nodejs.org/)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 ---
 
@@ -84,6 +83,88 @@ When running automated tests in parallel:
 
 ---
 
+## 📂 Project Structure
+
+```
+parallel-test-data/
+│
+├── 📁 config/                          # Environment configurations
+│   └── environments.js                 # QA, Dev, Prod environment settings
+│
+├── 📁 cypress/                         # Cypress test framework
+│   ├── 📁 e2e/                         # End-to-end test specs
+│   │   ├── login.cy.js                 # Login functionality tests
+│   │   ├── checkout.cy.js              # Checkout flow tests
+│   │   ├── user-management.cy.js       # Data pool management tests
+│   │   └── product-selection.cy.js     # Product selection tests
+│   │
+│   ├── 📁 support/                     # Support files and custom commands
+│   │   ├── commands.js                 # Custom Cypress commands
+│   │   ├── e2e.js                      # Global configuration and behavior
+│   │   └── helpers.js                  # Utility helper functions
+│   │
+│   └── 📁 fixtures/                    # Test data files per environment
+│       ├── testData-qa.json            # QA environment test data
+│       ├── testData-dev.json           # Dev environment test data
+│       └── testData-prod.json          # Prod environment test data
+│
+├── 📁 data-manager/                    # Core data pool management
+│   ├── dataPool.js                     # Data pool acquisition/release logic
+│   ├── cleanup.js                      # Data cleanup utility
+│   ├── lockManager.js                  # File-based locking mechanism
+│   └── poolStatus.js                   # Pool status tracking
+│
+├── 📁 dashboard/                       # Real-time monitoring dashboard
+│   ├── index.html                      # Dashboard UI structure
+│   ├── styles.css                      # Premium glassmorphism styling
+│   ├── app.js                          # Dashboard client-side logic
+│   ├── server.js                       # Express API server
+│   └── 📁 assets/                      # Dashboard assets
+│       ├── dashboard_demo.webp         # Demo video/animation
+│       ├── dashboard_full.png          # Full dashboard screenshot
+│       └── architecture.png            # Architecture diagram
+│
+├── 📁 scripts/                         # Automation and utility scripts
+│   ├── test-all-environments.js        # Run tests across all environments
+│   ├── show-environments.js            # Display environment data
+│   ├── run-parallel.js                 # Parallel test execution script
+│   └── init-data.js                    # Initialize data pools
+│
+├── 📁 docs/                            # Documentation files
+│   ├── MULTI_ENVIRONMENT_GUIDE.md      # Multi-environment setup guide
+│   ├── EXECUTION_RESULTS.md            # Test execution results
+│   ├── implementation_plan.md          # Detailed implementation plan
+│   └── walkthrough.md                  # Complete project walkthrough
+│
+├── 📄 cypress.config.js                # Cypress configuration
+├── 📄 package.json                     # Project dependencies and scripts
+├── 📄 .gitignore                       # Git ignore rules
+├── 📄 LICENSE                          # ISC License
+└── 📄 README.md                        # This file
+```
+
+### Directory Descriptions
+
+#### `/config` - Configuration Management
+Contains environment-specific configurations including base URLs, user credentials, and product data for QA, Dev, and Production environments.
+
+#### `/cypress` - Test Framework
+Houses all Cypress tests, custom commands, support files, and test data fixtures organized by environment.
+
+#### `/data-manager` - Core Logic
+Contains the thread-safe data pool management system with file-based locking, acquisition/release mechanisms, and status tracking.
+
+#### `/dashboard` - Monitoring Interface
+Real-time web-based dashboard for monitoring test execution, data pool status, and environment switching with premium UI design.
+
+#### `/scripts` - Automation Tools
+Utility scripts for running tests across environments, parallel execution, data initialization, and environment inspection.
+
+#### `/docs` - Documentation
+Comprehensive guides, execution results, implementation plans, and walkthrough documentation.
+
+---
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -93,7 +174,7 @@ When running automated tests in parallel:
 
 ### Installation
 
-\`\`\`bash
+```bash
 # Clone or navigate to the project
 cd ParallelTestData
 
@@ -102,20 +183,20 @@ npm install
 
 # Initialize data pools (optional - auto-initializes on first run)
 npm run cleanup
-\`\`\`
+```
 
 ### Run the Dashboard
 
-\`\`\`bash
+```bash
 # Start the dashboard server
 npm run dashboard
 
 # Open browser to http://localhost:3001
-\`\`\`
+```
 
 ### Run Tests
 
-\`\`\`bash
+```bash
 # Run tests in QA environment (default)
 npm test
 
@@ -127,48 +208,17 @@ TEST_ENV=prod npm test
 
 # Run tests in parallel
 npm run test:parallel
-\`\`\`
+```
 
 ---
 
 ## 📖 Implementation Guide
 
-### Step 1: Project Structure
+### Step 1: Environment Configuration
 
-\`\`\`
-parallel-test-data/
-├── config/
-│   └── environments.js          # Environment configurations
-├── cypress/
-│   ├── e2e/
-│   │   ├── login.cy.js          # Login tests
-│   │   ├── checkout.cy.js       # Checkout flow tests
-│   │   └── user-management.cy.js # Data pool tests
-│   ├── support/
-│   │   ├── commands.js          # Custom Cypress commands
-│   │   └── e2e.js               # Support file
-│   └── fixtures/
-│       ├── testData-qa.json     # QA environment data
-│       ├── testData-dev.json    # Dev environment data
-│       └── testData-prod.json   # Prod environment data
-├── data-manager/
-│   ├── dataPool.js              # Core data pool manager
-│   └── cleanup.js               # Cleanup utility
-├── dashboard/
-│   ├── index.html               # Dashboard UI
-│   ├── styles.css               # Premium CSS
-│   ├── app.js                   # Dashboard logic
-│   └── server.js                # Express API
-├── cypress.config.js            # Cypress configuration
-├── package.json
-└── README.md
-\`\`\`
+Create `config/environments.js`:
 
-### Step 2: Environment Configuration
-
-Create \`config/environments.js\`:
-
-\`\`\`javascript
+```javascript
 module.exports = {
   qa: {
     name: 'QA',
@@ -189,13 +239,13 @@ module.exports = {
     products: [/* Prod products */]
   }
 };
-\`\`\`
+```
 
-### Step 3: Data Pool Manager
+### Step 2: Data Pool Manager
 
-The \`dataPool.js\` handles thread-safe data operations:
+The `dataPool.js` handles thread-safe data operations:
 
-\`\`\`javascript
+```javascript
 // Acquire data from pool
 const user = await dataPool.acquire('users', workerId);
 
@@ -204,13 +254,13 @@ const user = await dataPool.acquire('users', workerId);
 
 // Release data back to pool
 await dataPool.release(user.id, 'users');
-\`\`\`
+```
 
-### Step 4: Custom Cypress Commands
+### Step 3: Custom Cypress Commands
 
 Use in your tests:
 
-\`\`\`javascript
+```javascript
 describe('Login Test', () => {
   let userData;
 
@@ -235,13 +285,13 @@ describe('Login Test', () => {
     cy.url().should('include', '/inventory.html');
   });
 });
-\`\`\`
+```
 
-### Step 5: Dashboard Setup
+### Step 4: Dashboard Setup
 
 Start the Express server:
 
-\`\`\`javascript
+```javascript
 // dashboard/server.js
 const express = require('express');
 const app = express();
@@ -254,7 +304,7 @@ app.get('/api/pool-status', (req, res) => {
 app.listen(3001, () => {
   console.log('Dashboard running on http://localhost:3001');
 });
-\`\`\`
+```
 
 ---
 
@@ -263,39 +313,39 @@ app.listen(3001, () => {
 ### Data Pool Management
 
 1. **Initialization**: Each environment gets its own data file
-   - \`testData-qa.json\`
-   - \`testData-dev.json\`
-   - \`testData-prod.json\`
+   - `testData-qa.json`
+   - `testData-dev.json`
+   - `testData-prod.json`
 
 2. **Acquisition**: Test requests data with file locking
-   \`\`\`javascript
+   ```javascript
    const user = await dataPool.acquire('users', 'worker-1');
    // User is marked as "in-use"
-   \`\`\`
+   ```
 
 3. **Usage**: Test executes with unique data
-   \`\`\`javascript
+   ```javascript
    cy.login(user.username, user.password);
-   \`\`\`
+   ```
 
 4. **Release**: Data returned to pool
-   \`\`\`javascript
+   ```javascript
    await dataPool.release(user.id, 'users');
    // User is marked as "available"
-   \`\`\`
+   ```
 
 ### Environment Switching
 
-\`\`\`bash
+```bash
 # Set TEST_ENV environment variable
 TEST_ENV=qa npm test      # Uses testData-qa.json
 TEST_ENV=dev npm test     # Uses testData-dev.json
 TEST_ENV=prod npm test    # Uses testData-prod.json
-\`\`\`
+```
 
 ### Parallel Execution
 
-\`\`\`bash
+```bash
 # Terminal 1 - QA
 TEST_ENV=qa npm run test:parallel
 
@@ -304,7 +354,7 @@ TEST_ENV=dev npm run test:parallel
 
 # Terminal 3 - Prod (runs simultaneously)
 TEST_ENV=prod npm run test:parallel
-\`\`\`
+```
 
 **No conflicts!** Each environment has its own data pool.
 
@@ -314,7 +364,7 @@ TEST_ENV=prod npm run test:parallel
 
 ### Example 1: Basic Test with Data Pool
 
-\`\`\`javascript
+```javascript
 describe('Product Checkout', () => {
   let userData, productData;
 
@@ -335,11 +385,11 @@ describe('Product Checkout', () => {
     cy.url().should('include', '/checkout-complete');
   });
 });
-\`\`\`
+```
 
 ### Example 2: Environment-Specific Assertions
 
-\`\`\`javascript
+```javascript
 it('should have correct product count', () => {
   const env = Cypress.env('TEST_ENV') || 'qa';
   
@@ -353,11 +403,11 @@ it('should have correct product count', () => {
     cy.get('.product').should('have.length', 5); // QA has 5
   }
 });
-\`\`\`
+```
 
 ### Example 3: Parallel Test Runner
 
-\`\`\`javascript
+```javascript
 // run-parallel.js
 const { spawn } = require('child_process');
 
@@ -365,10 +415,10 @@ const NUM_WORKERS = 3;
 
 for (let i = 0; i < NUM_WORKERS; i++) {
   spawn('npx', ['cypress', 'run'], {
-    env: { ...process.env, CYPRESS_workerId: \`worker-\${i}\` }
+    env: { ...process.env, CYPRESS_workerId: `worker-${i}` }
   });
 }
-\`\`\`
+```
 
 ---
 
@@ -383,7 +433,7 @@ Each test gets **unique data** ensuring:
 
 ### File-Based Locking
 
-Uses \`proper-lockfile\` library:
+Uses `proper-lockfile` library:
 - ✅ Prevents race conditions
 - ✅ Automatic retry mechanism
 - ✅ Works in CI/CD environments
@@ -400,10 +450,10 @@ Complete isolation per environment:
 
 ## 📚 Documentation
 
-- **[MULTI_ENVIRONMENT_GUIDE.md](MULTI_ENVIRONMENT_GUIDE.md)** - Comprehensive guide for managing test data across QA, Dev, and Prod
-- **[EXECUTION_RESULTS.md](EXECUTION_RESULTS.md)** - Test execution results from all environments
-- **[Implementation Plan](file:///C:/Users/mvsar/.gemini/antigravity/brain/4a050633-a517-450a-a86c-c4e74008491e/implementation_plan.md)** - Detailed implementation plan
-- **[Walkthrough](file:///C:/Users/mvsar/.gemini/antigravity/brain/4a050633-a517-450a-a86c-c4e74008491e/walkthrough.md)** - Complete project walkthrough
+- **[MULTI_ENVIRONMENT_GUIDE.md](docs/MULTI_ENVIRONMENT_GUIDE.md)** - Comprehensive guide for managing test data across QA, Dev, and Prod
+- **[EXECUTION_RESULTS.md](docs/EXECUTION_RESULTS.md)** - Test execution results from all environments
+- **[implementation_plan.md](docs/implementation_plan.md)** - Detailed implementation plan
+- **[walkthrough.md](docs/walkthrough.md)** - Complete project walkthrough
 
 ---
 
@@ -411,9 +461,9 @@ Complete isolation per environment:
 
 ### Cypress Configuration
 
-Edit \`cypress.config.js\`:
+Edit `cypress.config.js`:
 
-\`\`\`javascript
+```javascript
 module.exports = defineConfig({
   e2e: {
     baseUrl: 'https://www.saucedemo.com',
@@ -429,11 +479,11 @@ module.exports = defineConfig({
     }
   }
 });
-\`\`\`
+```
 
 ### Data Pool Configuration
 
-Edit \`config/environments.js\` to customize:
+Edit `config/environments.js` to customize:
 - Number of users per environment
 - Number of products per environment
 - Base URLs
@@ -441,11 +491,11 @@ Edit \`config/environments.js\` to customize:
 
 ### Parallel Workers
 
-Edit \`run-parallel.js\`:
+Edit `run-parallel.js`:
 
-\`\`\`javascript
+```javascript
 const NUM_WORKERS = 3; // Change this value
-\`\`\`
+```
 
 ---
 
@@ -482,13 +532,13 @@ const NUM_WORKERS = 3; // Change this value
 
 ### Run All Environment Tests
 
-\`\`\`bash
+```bash
 # Test all environments sequentially
 node test-all-environments.js
-\`\`\`
+```
 
 **Output:**
-\`\`\`
+```
 🌍 Multi-Environment Test Execution
 ================================================================================
 🧪 Testing QA Environment
@@ -507,14 +557,14 @@ node test-all-environments.js
 ✅ PROD environment test PASSED!
 
 🎉 All Environment Tests Completed Successfully!
-\`\`\`
+```
 
 ### View Environment Data
 
-\`\`\`bash
+```bash
 # Show data for all environments
 node show-environments.js
-\`\`\`
+```
 
 ---
 
@@ -522,7 +572,7 @@ node show-environments.js
 
 ### GitHub Actions Example
 
-\`\`\`yaml
+```yaml
 name: Multi-Environment Tests
 
 on: [push, pull_request]
@@ -548,19 +598,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: npm install
       - run: TEST_ENV=prod npm test
-\`\`\`
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the project
-2. Create your feature branch (\`git checkout -b feature/AmazingFeature\`)
-3. Commit your changes (\`git commit -m 'Add some AmazingFeature'\`)
-4. Push to the branch (\`git push origin feature/AmazingFeature\`)
-5. Open a Pull Request
+```
 
 ---
 
@@ -572,9 +610,13 @@ ISC License - see the [LICENSE](LICENSE) file for details
 
 ## 👤 Author
 
-**Created by:** Your Name  
-**Email:** your.email@example.com  
-**GitHub:** [@yourusername](https://github.com/yourusername)
+**Saran Kumar**
+
+Senior QA Automation Engineer specializing in test automation frameworks, parallel execution strategies, and enterprise-level testing solutions.
+
+- 💼 Focus: Test Automation Architecture & Data Management
+- 🔧 Expertise: Cypress, JavaScript/Node.js, CI/CD Integration
+- 🌟 Passionate about building scalable testing solutions
 
 ---
 
@@ -588,9 +630,8 @@ ISC License - see the [LICENSE](LICENSE) file for details
 
 ## 📞 Support
 
-- 📧 Email: support@example.com
-- 💬 Issues: [GitHub Issues](https://github.com/yourusername/parallel-test-data/issues)
-- 📖 Documentation: [Full Docs](https://github.com/yourusername/parallel-test-data/wiki)
+- 💬 Issues: [GitHub Issues](https://github.com/sarankumar/parallel-test-data/issues)
+- 📖 Documentation: [Full Docs](https://github.com/sarankumar/parallel-test-data/wiki)
 
 ---
 
