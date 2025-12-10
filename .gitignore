@@ -1,0 +1,39 @@
+# Cypress Test Data Pool - .gitignore
+
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Cypress
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+
+# Test Data & Reports
+cypress/fixtures/testData.json
+cypress/fixtures/testData-*.json
+reports/
+data-manager/locks/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.env.local
+.env.*.local

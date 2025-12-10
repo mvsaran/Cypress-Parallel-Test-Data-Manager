@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cypress Parallel Test Data Manager</title>
+    <meta name="description"
+        content="Real-time dashboard for monitoring Cypress test execution and data pool management in parallel environments">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="background-gradient"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">🔄</div>
+                    <div>
+                        <h1 class="title">Parallel Test Data Manager</h1>
+                        <p class="subtitle">Real-time Cypress Test Monitoring</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <div class="env-selector">
+                        <label for="environment-select" class="env-label">Environment:</label>
+                        <select id="environment-select" class="env-select">
+                            <option value="qa">QA</option>
+                            <option value="dev">Development</option>
+                            <option value="prod">Production</option>
+                        </select>
+                        <div id="env-indicator" class="env-indicator">QA</div>
+                    </div>
+                    <button id="refresh-btn" class="btn btn-secondary">
+                        <span class="btn-icon">🔄</span>
+                        Refresh
+                    </button>
+                    <button id="cleanup-btn" class="btn btn-primary">
+                        <span class="btn-icon">🧹</span>
+                        Cleanup Pool
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats Overview -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);">👥</div>
+                <div class="stat-content">
+                    <div class="stat-label">Total Users</div>
+                    <div class="stat-value" id="total-users">0</div>
+                    <div class="stat-detail">
+                        <span class="stat-available" id="available-users">0 available</span>
+                        <span class="stat-separator">•</span>
+                        <span class="stat-inuse" id="inuse-users">0 in use</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #F97316 0%, #EA580C 100%);">📦</div>
+                <div class="stat-content">
+                    <div class="stat-label">Total Products</div>
+                    <div class="stat-value" id="total-products">0</div>
+                    <div class="stat-detail">
+                        <span class="stat-available" id="available-products">0 available</span>
+                        <span class="stat-separator">•</span>
+                        <span class="stat-inuse" id="inuse-products">0 in use</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%);">✅</div>
+                <div class="stat-content">
+                    <div class="stat-label">Tests Passed</div>
+                    <div class="stat-value" id="tests-passed">0</div>
+                    <div class="stat-detail">
+                        <span class="stat-available">Last 24 hours</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #FF6B6B 0%, #EE5A52 100%);">⚡</div>
+                <div class="stat-content">
+                    <div class="stat-label">Active Tests</div>
+                    <div class="stat-value" id="active-tests">0</div>
+                    <div class="stat-detail">
+                        <span class="stat-available">Running now</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Pool Status -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Data Pool Status</h2>
+                <div class="status-indicator">
+                    <span class="status-dot status-active"></span>
+                    <span class="status-text">Active</span>
+                </div>
+            </div>
+
+            <div class="pool-grid">
+                <!-- Users Pool -->
+                <div class="pool-card">
+                    <div class="pool-header">
+                        <h3 class="pool-title">👥 Users Pool</h3>
+                        <div class="pool-badge" id="users-badge">0/0</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill progress-purple" id="users-progress" style="width: 0%"></div>
+                    </div>
+                    <div class="pool-items" id="users-pool"></div>
+                </div>
+
+                <!-- Products Pool -->
+                <div class="pool-card">
+                    <div class="pool-header">
+                        <h3 class="pool-title">📦 Products Pool</h3>
+                        <div class="pool-badge" id="products-badge">0/0</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill progress-orange" id="products-progress" style="width: 0%"></div>
+                    </div>
+                    <div class="pool-items" id="products-pool"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Test Results -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Recent Test Results</h2>
+                <select id="filter-select" class="filter-select">
+                    <option value="all">All Tests</option>
+                    <option value="passed">Passed</option>
+                    <option value="failed">Failed</option>
+                </select>
+            </div>
+
+            <div class="results-container" id="test-results">
+                <div class="empty-state">
+                    <div class="empty-icon">📊</div>
+                    <h3 class="empty-title">No test results yet</h3>
+                    <p class="empty-text">Run your Cypress tests to see results here</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
